@@ -4,6 +4,7 @@ use CodeIgniter\Model;
 
 class StudentModel extends Model
 {
+    protected $db;
     protected $table      = 'student';
     protected $primaryKey = 'id';
 
@@ -32,11 +33,20 @@ class StudentModel extends Model
     protected $validationMessages = [];
     protected $skipValidation     = true;
 
+    public function __construct() 
+    {
+        $this->db = \Config\Database::connect();
+    }
+
+    /**
+        * This function fetches all students data.
+    */
+    
     public function fetchStudents() 
     {
-        $db = \Config\Database::connect();
         
-        $arrmixUserData = $db->table('student')
+        
+        $arrmixUserData = $this->db->table('student')
             ->where('is_deleted', 0)
             ->orderBy('created_at', 'DESC')
             ->get()
@@ -45,16 +55,30 @@ class StudentModel extends Model
         return $arrmixUserData;
     }
 
+    /**
+        * This function fetches the second highest pocket money for all students.
+    */
+
     public function fetchSecondHighestPocketMoney()
     {
-        $db = \Config\Database::connect();
         
-        $arrmixUserData = $db->table('student')
+        $arrmixUserData = $this->db->table('student')
             ->where('is_deleted', 0)
             ->orderBy('pocket_money', 'DESC')
             ->limit(2, 1)
             ->get()
             ->getResult()[0];
+
+        /* $arrmixUserData = $this->db
+        ->query( '
+            SELECT
+                first_name,
+                MAX(pocket_money) AS pocket_money
+            FROM 
+                student
+            WHERE 
+                pocket_money < ( SELECT MAX(pocket_money) FROM student )'
+        )->getResult(); */
             
         return $arrmixUserData;
     }

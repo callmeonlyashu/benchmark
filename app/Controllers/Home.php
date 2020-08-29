@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\StudentModel;
+use Common;
 
 class Home extends BaseController
 {
@@ -12,13 +13,17 @@ class Home extends BaseController
 		$this->m_validation =  \Config\Services::validation();
 	}
 
+	/**
+        * Handles Landing page.
+    */
 	public function index()
 	{
 		$arrmixUserData = $this->studentModel->fetchStudents();
 
+		// Filtering out students with non-prime number ids
 		foreach( $arrmixUserData as $index=>$row ) {
 			
-			if( !$this->primeCheck( $row->id ) ) {
+			if( !Common::isPrime( $row->id ) ) {
 				unset($arrmixUserData[$index]);
 			}
 		}
@@ -48,6 +53,9 @@ class Home extends BaseController
         }
     }
 
+	/**
+        * This function handles insertion of student in the database.
+    */
 	public function addStudent()
 	{
 		$arrstrValidateUserData = [
@@ -88,16 +96,5 @@ class Home extends BaseController
 			echo json_encode( array( 'type' => 'error', 'message' => $errorMessage[0] ) );
 		}
 	}
-
-	private function primeCheck( $number )
-	{ 
-	    if ($number == 1) 
-	    return false; 
-	    for ($i = 2; $i <= $number/2; $i++){ 
-	        if ($number % $i == 0) 
-	            return false; 
-	    } 
-	    return true; 
-	} 
 
 }

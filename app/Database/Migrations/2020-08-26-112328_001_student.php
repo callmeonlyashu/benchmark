@@ -7,7 +7,7 @@ class Student extends Migration {
 		$this->forge->addField([
 				'id'    			 => [
 					'type'           => 'INT',
-					'constraint'     => 5,
+					'constraint'     => 6,
 					'unsigned'       => TRUE,
 					'auto_increment' => TRUE
 				],
@@ -52,8 +52,8 @@ class Student extends Migration {
 					'null'           => TRUE,
 				],
 				'zip'       	 	=> [
-					'type'           => 'VARCHAR',
-					'constraint'	 => 50,
+					'type'           => 'CHAR',
+					'constraint'	 => 7,
 					'null'           => TRUE,
 				],
 				'country'       	 	=> [
